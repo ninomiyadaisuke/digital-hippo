@@ -13,6 +13,7 @@ import {
   AuthCredentialsValidator,
   type TAuthCredentialsValidator,
 } from "@/lib/validators/account-credentials-validator";
+import { trpc } from "@/trpc/client";
 
 const Page = () => {
   const {
@@ -22,6 +23,9 @@ const Page = () => {
   } = useForm<TAuthCredentialsValidator>({
     resolver: zodResolver(AuthCredentialsValidator),
   });
+
+  const { data } = trpc.anyApiRoute.useQuery();
+  
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
     console.log(email, password);
@@ -71,7 +75,9 @@ const Page = () => {
                     {...register("password")}
                     id="password"
                     type="password"
-                    className={cn({ "focus-visible:ring-red-500": errors?.password })}
+                    className={cn({
+                      "focus-visible:ring-red-500": errors?.password,
+                    })}
                     placeholder="Password"
                   />
                   {errors?.password && (
