@@ -14,14 +14,16 @@ import { useEffect, useState } from "react";
 const Page = () => {
   const { items, removeItem } = useCart();
 
-  const { mutate: createCheckoutSession, isLoading } =
-  trpc.payment.createSession.useMutation({
-    onSuccess: ({ url }) => {
-      if (url) router.push(url)
-    },
-  })
+  const router = useRouter();
 
-  const router = useRouter()
+  const { mutate: createCheckoutSession, isLoading } =
+    trpc.payment.createSession.useMutation({
+      onSuccess: ({ url }) => {
+        if (url) router.push(url);
+      },
+    });
+
+  const productIds = items.map(({ product }) => product.id);
 
   const [isMounted, setIsMounted] = useState<boolean>(false);
   useEffect(() => {
@@ -31,15 +33,17 @@ const Page = () => {
   const cartTotal = items.reduce(
     (total, { product }) => total + product.price,
     0
-  )
+  );
 
-  const fee = 1
+  const fee = 1;
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Shopping Cart
         </h1>
+
         <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
           <div
             className={cn("lg:col-span-7", {
@@ -68,6 +72,7 @@ const Page = () => {
                 </p>
               </div>
             ) : null}
+
             <ul
               className={cn({
                 "divide-y divide-gray-200 border-b border-t border-gray-200":
@@ -146,6 +151,7 @@ const Page = () => {
                 })}
             </ul>
           </div>
+
           <section className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
             <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
 
@@ -190,14 +196,14 @@ const Page = () => {
 
             <div className="mt-6">
               <Button
-                // disabled={items.length === 0 || isLoading}
-                // onClick={() => createCheckoutSession({ productIds })}
+                disabled={items.length === 0 || isLoading}
+                onClick={() => createCheckoutSession({ productIds })}
                 className="w-full"
                 size="lg"
               >
-                {/* {isLoading ? (
+                {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-1.5" />
-                ) : null} */}
+                ) : null}
                 Checkout
               </Button>
             </div>
