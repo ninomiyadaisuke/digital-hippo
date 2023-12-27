@@ -91,7 +91,7 @@ const ImageSlider = ({ urls }: ImageSliderProps) => {
               src={url}
               alt="Product image"
             />
- http://localhost:3000/product/6583ec4f4829a183f13fe3d3         </SwiperSlide>
+          </SwiperSlide>
         ))}
       </Swiper>
     </div>
